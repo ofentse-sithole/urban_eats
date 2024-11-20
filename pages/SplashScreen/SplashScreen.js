@@ -15,13 +15,13 @@ const SplashScreen = () => {
 
     return (
         <ImageBackground
-            source={require('../../assets/img/background.png')} // Replace with your background image path
+            source={require('../../assets/img/splashscreen.jpeg')} // Replace with your background image path
             style={styles.background}
             resizeMode="cover"
         >
             <View style={styles.container}>
                 <Image
-                    source={require('../../assets/img/profile_picture-removebg-preview_2.png')} // Replace with your main image path
+                    source={require('../../assets/img/')} // Replace with your main image path
                     style={styles.image}
                     resizeMode="contain"
                 />
