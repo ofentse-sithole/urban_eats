@@ -20,11 +20,11 @@ const SplashScreen = () => {
             resizeMode="cover"
         >
             <View style={styles.container}>
-                <Image
+                {/*<Image
                     source={require('../../assets/img/')} // Replace with your main image path
                     style={styles.image}
                     resizeMode="contain"
-                />
+                />*/}
                 <View style={styles.textContainer}>
                     <Text style={styles.text}>from Erence Developers
                         {/*<Image

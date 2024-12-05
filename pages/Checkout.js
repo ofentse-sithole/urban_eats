@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { View, Text, Button, FlatList, StyleSheet } from "react-native";
+import Navbar from "../components/Navbar";
 
 const Checkout = ({ route }) => {
-    const { cart } = route.params;
+    const { cart } = route.params;  // cart is passed via navigation
     const [deliveryOption, setDeliveryOption] = useState("pickup");
 
     const handlePayment = () => {
@@ -11,28 +12,42 @@ const Checkout = ({ route }) => {
     };
 
     return (
-        <View style={styles.container}>
-            <Text style={styles.title}>Checkout</Text>
+        <View style={[stylesCheckout.container, { paddingTop: 40 }]}>
+            <Text style={stylesCheckout.title}>Checkout</Text>
+
+            <Text style={stylesCheckout.total}>
+                Total: R{cart.reduce((acc, item) => acc + item.price, 0)}
+            </Text>
+
+            <Button
+                title="Select Delivery Option"
+                onPress={() => setDeliveryOption(deliveryOption === "pickup" ? "delivery" : "pickup")}
+            />
+
+            <Text style={stylesCheckout.deliveryOption}>
+                Delivery Option: {deliveryOption === "pickup" ? "Pick Up" : "Delivery"}
+            </Text>
+
+            <Button title="Proceed to Payment" onPress={handlePayment} />
+
             <FlatList
                 data={cart}
                 keyExtractor={(item, index) => `${item.name}-${index}`}
                 renderItem={({ item }) => (
-                    <Text style={styles.cartItem}>
+                    <Text style={stylesCheckout.cartItem}>
                         {item.name} - R{item.price}
                     </Text>
                 )}
             />
-            <Text style={styles.total}>Total: R{cart.reduce((acc, item) => acc + item.price, 0)}</Text>
-            <Button title="Select Delivery Option" onPress={() => setDeliveryOption(deliveryOption === "pickup" ? "delivery" : "pickup")} />
-            <Text style={styles.deliveryOption}>Delivery Option: {deliveryOption === "pickup" ? "Pick Up" : "Delivery"}</Text>
-            <Button title="Proceed to Payment" onPress={handlePayment} />
+
+            <Navbar activeTab="Checkout" />
         </View>
     );
 };
 
 export default Checkout;
 
-const styles = StyleSheet.create({
+const stylesCheckout = StyleSheet.create({
     container: {
         padding: 20,
         flex: 1,

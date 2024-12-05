@@ -10,28 +10,28 @@ const Navbar = () => {
         <View style={styles.tabbar}>
             <TouchableOpacity
                 style={styles.tabbarItem}
-                onPress={() => navigation.navigate('dashboard')}
+                onPress={() => navigation.navigate('Dashboard')}
             >
                 <AntDesign name="home" size={24} color="#0891b2" />
                 <Text style={styles.tabText}>Home</Text>
             </TouchableOpacity>
             <TouchableOpacity
                 style={styles.tabbarItem}
-                onPress={() => navigation.navigate('order')}
+                onPress={() => navigation.navigate('Order')}
             >
-                <AntDesign name="search1" size={24} color="#737373" />
-                <Text style={styles.tabText}>Explore</Text>
+                <AntDesign name="profile" size={24} color="#737373" />
+                <Text style={styles.tabText}>Order</Text>
             </TouchableOpacity>
             <TouchableOpacity
                 style={styles.tabbarItem}
-                onPress={() => navigation.navigate('checkout')}
+                onPress={() => navigation.navigate('Checkout', { cart: [] })}
             >
-                <AntDesign name="pluscircleo" size={24} color="#737373" />
-                <Text style={styles.tabText}>Create</Text>
+                <AntDesign name="shoppingcart" size={24} color="#737373" />
+                <Text style={styles.tabText}>Checkout</Text>
             </TouchableOpacity>
             <TouchableOpacity
                 style={styles.tabbarItem}
-                onPress={() => navigation.navigate('profile')}
+                onPress={() => navigation.navigate('Profile')}
             >
                 <Feather name="user" size={24} color="#737373" />
                 <Text style={styles.tabText}>Profile</Text>

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity, FlatList, StyleSheet, Button } from "react-native";
 import menuData from "./MenuData/Menu";
+import Navbar from "../components/Navbar";
 
 const Order = ({ navigation }) => {
     const [cart, setCart] = useState([]);
@@ -25,40 +26,51 @@ const Order = ({ navigation }) => {
     );
 
     return (
-        <FlatList
-            data={menuData}
-            keyExtractor={(item) => item.category}
-            renderItem={({ item }) => (
-                <View style={styles.categoryContainer}>
-                    <TouchableOpacity onPress={() => toggleExpand(item.category)}>
-                        <Text style={styles.categoryTitle}>{item.category}</Text>
-                    </TouchableOpacity>
-                    {expanded[item.category] && (
-                        <FlatList
-                            data={item.items}
-                            keyExtractor={(item, index) => `${item.name}-${index}`}
-                            renderItem={renderMenuItem}
-                        />
-                    )}
-                </View>
-            )}
-            ListFooterComponent={
-                <Button
-                    title="Go to Checkout"
-                    onPress={() => navigation.navigate("Checkout", { cart })}
-                />
-            }
-        />
+        <View style={{ flex: 1, paddingTop: 40 }}>
+            <Text style={styles.pageTitle}>Order</Text>
+            <FlatList
+                data={menuData}
+                keyExtractor={(item) => item.category}
+                renderItem={({ item }) => (
+                    <View style={styles.categoryContainer}>
+                        <TouchableOpacity onPress={() => toggleExpand(item.category)}>
+                            <Text style={styles.categoryTitle}>{item.category}</Text>
+                        </TouchableOpacity>
+                        {expanded[item.category] && (
+                            <FlatList
+                                data={item.items}
+                                keyExtractor={(item, index) => `${item.name}-${index}`}
+                                renderItem={renderMenuItem}
+                            />
+                        )}
+                    </View>
+                )}
+                ListFooterComponent={
+                    <Button
+                        title="Go to Checkout"
+                        onPress={() => navigation.navigate("Checkout", { cart })}
+                    />
+                }
+            />
+            <Navbar activeTab="Order" />
+        </View>
     );
 };
 
 export default Order;
 
 const styles = StyleSheet.create({
+    pageTitle: {
+        fontSize: 24,
+        fontWeight: "bold",
+        textAlign: "center",
+        marginBottom: 20,
+        color: "#333",
+    },
     categoryContainer: {
-        padding: 10,
+        padding: 15,
         backgroundColor: "#f8f8f8",
-        marginBottom: 10,
+        marginBottom: 20,
     },
     categoryTitle: {
         fontSize: 18,
@@ -68,7 +80,7 @@ const styles = StyleSheet.create({
     menuItem: {
         flexDirection: "row",
         justifyContent: "space-between",
-        paddingVertical: 5,
+        paddingVertical: 10,
     },
     itemText: {
         fontSize: 16,
