@@ -50,20 +50,22 @@ const Dashboard = ({ username = 'User', navigation }) => {
 
     useEffect(() => {
         const currentHour = new Date().getHours();
+        const currentDay = new Date().getDay(); // 0 is Sunday, 6 is Saturday
         const updatedData = initialData.map(item => {
-            if (currentHour >= 11 && currentHour < 18) {
+            if (currentDay === 0) { // Check if it's Sunday
+                return { ...item, status: 'Closed will open on Monday until Saturday' };
+            } else if (currentHour >= 13 && currentHour < 19) {
                 return { ...item, status: 'Open' };
             } else {
-                return { ...item, status: 'Closed will open at 11:00' };
+                return { ...item, status: 'Closed will be open at 11:00'};
             }
         });
         setData(updatedData);
     }, []);
 
     const handlePress = (category) => {
-        navigation.navigate('Order', { category }); 
+        navigation.navigate('Order', { category });
     };
-
     const renderItem = ({ item }) => (
         <TouchableOpacity onPress={() => handlePress(item.title)} activeOpacity={0.8}>
             <View style={styles.card}>
