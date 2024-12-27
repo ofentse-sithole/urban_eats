@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Dimensions, ImageBackground, FlatList, TouchableOpacity } from 'react-native';
 import Navbar from '../components/Navbar';
 
-const mockData = [
+const initialData = [
     {
         id: '1',
         title: 'Fries',
@@ -46,6 +46,20 @@ const mockData = [
 ];
 
 const Dashboard = ({ username = 'User', navigation }) => {
+    const [data, setData] = useState(initialData);
+
+    useEffect(() => {
+        const currentHour = new Date().getHours();
+        const updatedData = initialData.map(item => {
+            if (currentHour >= 11 && currentHour < 18) {
+                return { ...item, status: 'Open' };
+            } else {
+                return { ...item, status: 'Closed will open at 11:00' };
+            }
+        });
+        setData(updatedData);
+    }, []);
+
     const handlePress = (category) => {
         navigation.navigate('Order', { category }); 
     };
@@ -78,7 +92,7 @@ const Dashboard = ({ username = 'User', navigation }) => {
 
             {/* Main Content: List of Cards */}
             <FlatList
-                data={mockData}
+                data={data}
                 renderItem={renderItem}
                 keyExtractor={(item) => item.id}
                 contentContainerStyle={styles.list}
