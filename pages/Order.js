@@ -1,15 +1,13 @@
 import React, { useState } from "react";
-import { ScrollView, View, Text, TouchableOpacity, FlatList, StyleSheet } from "react-native";
+import { ScrollView, View, Text, TouchableOpacity, FlatList, StyleSheet, Dimensions } from "react-native";
+import { useCart } from "./CartContext"; // Import the cart context
 import menuData from "./MenuData/Menu";
 import Navbar from "../components/Navbar";
+import { MaterialIcons } from "@expo/vector-icons";
 
 const Order = ({ navigation }) => {
-    const [cart, setCart] = useState([]);
+    const { addToCart } = useCart(); // Use addToCart from context
     const [expanded, setExpanded] = useState({});
-
-    const addToCart = (item) => {
-        setCart([...cart, item]);
-    };
 
     const toggleExpand = (category) => {
         setExpanded((prev) => ({ ...prev, [category]: !prev[category] }));
@@ -30,7 +28,7 @@ const Order = ({ navigation }) => {
 
     return (
         <View style={{ flex: 1, backgroundColor: "#f3f4f6" }}>
-            <ScrollView>
+            <ScrollView contentContainerStyle={styles.scrollViewContent}>
                 <Text style={styles.pageTitle}>Order</Text>
                 <FlatList
                     data={menuData}
@@ -40,8 +38,14 @@ const Order = ({ navigation }) => {
                             <TouchableOpacity
                                 onPress={() => toggleExpand(item.category)}
                                 activeOpacity={0.8}
+                                style={styles.categoryHeader}
                             >
                                 <Text style={styles.categoryTitle}>{item.category}</Text>
+                                <MaterialIcons
+                                    name={expanded[item.category] ? "keyboard-arrow-up" : "keyboard-arrow-down"}
+                                    size={24}
+                                    color="#111827"
+                                />
                             </TouchableOpacity>
                             {expanded[item.category] && (
                                 <FlatList
@@ -52,15 +56,6 @@ const Order = ({ navigation }) => {
                             )}
                         </View>
                     )}
-                    ListFooterComponent={
-                        <TouchableOpacity
-                            style={styles.checkoutButton}
-                            onPress={() => navigation.navigate("Checkout", { cart })}
-                            activeOpacity={0.8}
-                        >
-                            <Text style={styles.checkoutText}>Go to Checkout</Text>
-                        </TouchableOpacity>
-                    }
                 />
             </ScrollView>
             <Navbar activeTab="Order" />
@@ -70,7 +65,13 @@ const Order = ({ navigation }) => {
 
 export default Order;
 
+
+const { width } = Dimensions.get("window");
 const styles = StyleSheet.create({
+    scrollViewContent: {
+        alignItems: "center",
+        paddingVertical: 20,
+    },
     pageTitle: {
         fontSize: 28,
         fontWeight: "bold",
@@ -80,9 +81,9 @@ const styles = StyleSheet.create({
         color: "#1f2937",
     },
     categoryContainer: {
+        width: width * 0.9,
         padding: 15,
         backgroundColor: "#ffffff",
-        marginHorizontal: 10,
         marginBottom: 15,
         borderRadius: 10,
         shadowColor: "#000",
@@ -91,11 +92,18 @@ const styles = StyleSheet.create({
         shadowRadius: 4,
         elevation: 3,
     },
+    categoryHeader: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+        paddingVertical: 10,
+        paddingHorizontal: 15,
+        borderRadius: 10,
+    },
     categoryTitle: {
         fontSize: 20,
         fontWeight: "600",
         color: "#111827",
-        marginBottom: 10,
     },
     menuItem: {
         flexDirection: "row",
@@ -131,5 +139,14 @@ const styles = StyleSheet.create({
         color: "#ffffff",
         fontSize: 18,
         fontWeight: "bold",
+    },
+    arrowIcon: {
+        marginLeft: 10,
+    },
+    dropdownItem: {
+        backgroundColor: "#fef3c7",
+        padding: 10,
+        borderBottomWidth: 1,
+        borderBottomColor: "#facc15",
     },
 });

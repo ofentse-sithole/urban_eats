@@ -1,17 +1,17 @@
 import React, { useState } from "react";
-import {
-    View,
-    Text,
-    FlatList,
-    StyleSheet,
-    TouchableOpacity,
-    ScrollView,
-} from "react-native";
+import { View, Text, FlatList, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
+import { useCart } from "./CartContext"; // Import the cart context
 import Navbar from "../components/Navbar";
 
-const Checkout = ({ route }) => {
-    const { cart } = route.params;
+const Checkout = () => {
+    const { cart, updateCart } = useCart(); // Use cart from context
     const [deliveryOption, setDeliveryOption] = useState("pickup");
+
+    // Function to remove an item from the cart
+    const handleRemoveItem = (itemToRemove) => {
+        const updatedCart = cart.filter((item, index) => index !== itemToRemove);
+        updateCart(updatedCart);
+    };
 
     const handlePayment = () => {
         alert("Proceeding to Payment");
@@ -25,16 +25,21 @@ const Checkout = ({ route }) => {
         <View style={{ flex: 1, backgroundColor: "#f9fafb" }}>
             <ScrollView contentContainerStyle={styles.container}>
                 <Text style={styles.title}>Checkout</Text>
-
                 <View style={styles.summaryContainer}>
                     <Text style={styles.summaryText}>Order Summary</Text>
                     <FlatList
                         data={cart}
                         keyExtractor={(item, index) => `${item.name}-${index}`}
-                        renderItem={({ item }) => (
+                        renderItem={({ item, index }) => (
                             <View style={styles.cartItem}>
                                 <Text style={styles.itemName}>{item.name}</Text>
                                 <Text style={styles.itemPrice}>R{item.price}</Text>
+                                <TouchableOpacity
+                                    style={styles.removeButton}
+                                    onPress={() => handleRemoveItem(index)}
+                                >
+                                    <Text style={styles.removeButtonText}>Remove</Text>
+                                </TouchableOpacity>
                             </View>
                         )}
                     />
@@ -43,7 +48,6 @@ const Checkout = ({ route }) => {
                         <Text style={styles.totalAmount}>R{calculateTotal()}</Text>
                     </View>
                 </View>
-
                 <View style={styles.deliveryContainer}>
                     <Text style={styles.deliveryLabel}>Delivery Option:</Text>
                     <View style={styles.deliveryButtons}>
@@ -85,11 +89,7 @@ const Checkout = ({ route }) => {
                         </TouchableOpacity>
                     </View>
                 </View>
-
-                <TouchableOpacity
-                    style={styles.paymentButton}
-                    onPress={handlePayment}
-                >
+                <TouchableOpacity style={styles.paymentButton} onPress={handlePayment}>
                     <Text style={styles.paymentText}>Proceed to Payment</Text>
                 </TouchableOpacity>
             </ScrollView>
@@ -132,6 +132,7 @@ const styles = StyleSheet.create({
     cartItem: {
         flexDirection: "row",
         justifyContent: "space-between",
+        alignItems: "center",
         paddingVertical: 10,
         borderBottomWidth: 1,
         borderBottomColor: "#e5e7eb",
@@ -144,6 +145,15 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: "bold",
         color: "#111827",
+    },
+    removeButton: {
+        padding: 5,
+        backgroundColor: "#ef4444",
+        borderRadius: 5,
+    },
+    removeButtonText: {
+        color: "#ffffff",
+        fontWeight: "bold",
     },
     totalContainer: {
         flexDirection: "row",

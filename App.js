@@ -11,82 +11,69 @@ import Profile from './pages/Profile';
 import Account from './pages/Profile/Account';
 import Terms_of_Service from './pages/Profile/Terms_of_Service';
 import About from './pages/Profile/About';
+import { CartProvider } from "./pages/CartContext";
 
 const App = () => {
-
   const Stack = createStackNavigator();
 
-  return(
-    <NavigationContainer>
-
-      {/*Starting point */}
-      <Stack.Navigator initialRouteName="SplashScreen">
-        <Stack.Screen
-          name="SplashScreen"
-          component= {SplashScreen}
-          options={{ headerShown: false}}
-        />
-
-        {/*Login page*/}
-        <Stack.Screen
-          name="Login"
-          component={Login}
-          options={{ headerShown: false }}
-        />
-
-        {/*Register page*/}
-        <Stack.Screen
-          name="Register"
-          component={Register}
-          options={{ headerShown: false }}
-        />
-
-        {/*Dashboard page*/}
-        <Stack.Screen
-          name="Dashboard"
-          component={Dashboard}
-          options={{ headerShown: false }}
-        />
-
-        <Stack.Screen
-          name="Order"
-          component={Order}
-          options={{ headerShown: false }}
-        />
-
-        <Stack.Screen
-          name="Checkout"
-          component={Checkout}
-          options={{ headerShown: false }}
-        />
-
-        <Stack.Screen
-          name="Profile"
-          component={Profile}
-          options={{ headerShown: false }}
-        />
-
-        <Stack.Screen
-          name="Terms_of_Service"
-          component={Terms_of_Service}
-          options={{ headerShown: false }}
-        />
-
-        <Stack.Screen
-          name="About"
-          component={About}
-          options={{ headerShown: false }}
-        />
-
-        <Stack.Screen
-          name="Account"
-          component={Account}
-          options={{ headerShown: false }}
-        />
-
-      </Stack.Navigator>
-    </NavigationContainer>
-  )
-}
+  return (
+    <CartProvider>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="SplashScreen">
+          <Stack.Screen
+            name="SplashScreen"
+            component={SplashScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Login"
+            component={Login}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Register"
+            component={Register}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Dashboard"
+            component={Dashboard}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Order"
+            component={Order}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Checkout"
+            component={Checkout}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Profile"
+            component={Profile}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Terms_of_Service"
+            component={Terms_of_Service}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="About"
+            component={About}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Account"
+            component={Account}
+            options={{ headerShown: false }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </CartProvider>
+  );
+};
 
 export default App;

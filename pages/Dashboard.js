@@ -1,89 +1,165 @@
 import React from 'react';
-import { View, Text, StyleSheet, Dimensions, ImageBackground } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, ImageBackground, FlatList, TouchableOpacity } from 'react-native';
 import Navbar from '../components/Navbar';
 
-const Dashboard = ({ username = "User" }) => {
-    return (
-        <View style={styles.container}>
-            <Text style={styles.welcomeText}>Welcome, {username}!</Text>
-            <View style={styles.gridContainer}>
-                <View style={styles.gridRow}>
-                    <ImageBackground source={require('../assets/img/grid1.png')} style={styles.gridItem} imageStyle={styles.imageBackground}>
-                        <Text style={styles.gridText}>Fries</Text>
-                    </ImageBackground>
-                    <ImageBackground source={require('../assets/img/grid6.jpeg')} style={styles.gridItem} imageStyle={styles.imageBackground}>
-                        <Text style={styles.gridText}>Kota Range</Text>
-                    </ImageBackground>
-                </View>
-                <View style={styles.gridRow}>
-                    <ImageBackground source={require('../assets/img/grid5.jpeg')} style={styles.gridItem} imageStyle={styles.imageBackground}>
-                        <Text style={styles.gridText}>Burgers</Text>
-                    </ImageBackground>
-                    <ImageBackground source={require('../assets/img/grid4.png')} style={styles.gridItem} imageStyle={styles.imageBackground}>
-                        <Text style={styles.gridText}>Meals</Text>
-                    </ImageBackground>
-                </View>
-                <View style={styles.gridRow}>
-                    <ImageBackground source={require('../assets/img/grid3.png')} style={styles.gridItem} imageStyle={styles.imageBackground}>
-                        <Text style={styles.gridText}>Quesadilla</Text>
-                    </ImageBackground>
+const mockData = [
+    {
+        id: '1',
+        title: 'Fries',
+        image: require('../assets/img/grid1.png'),
+        status: 'Closed',
+        rating: '4.5',
+        reviews: '400+',
+    },
+    {
+        id: '2',
+        title: 'Meals',
+        image: require('../assets/img/grid4.png'),
+        status: 'Open',
+        rating: '4.7',
+        reviews: '300+',
+    },
+    {
+        id: '3',
+        title: 'Quesadilla',
+        image: require('../assets/img/grid3.png'),
+        status: 'Closed',
+        rating: '4.6',
+        reviews: '250+',
+    },
+    {
+        id: '4',
+        title: 'Kota Range',
+        image: require('../assets/img/grid6.jpeg'),
+        status: 'Closed',
+        rating: '4.6',
+        reviews: '250+',
+    },
+    {
+        id: '5',
+        title: 'Burgers',
+        image: require('../assets/img/grid5.jpeg'),
+        status: 'Closed',
+        rating: '4.6',
+        reviews: '250+',
+    },
+];
+
+const Dashboard = ({ username = 'User', navigation }) => {
+    const handlePress = (category) => {
+        navigation.navigate('Order', { category }); 
+    };
+
+    const renderItem = ({ item }) => (
+        <TouchableOpacity onPress={() => handlePress(item.title)} activeOpacity={0.8}>
+            <View style={styles.card}>
+                <ImageBackground source={item.image} style={styles.cardImage}>
+                    <View style={styles.overlay}>
+                        <Text style={styles.statusText}>{item.status}</Text>
+                    </View>
+                </ImageBackground>
+                <View style={styles.cardInfo}>
+                    <Text style={styles.cardTitle}>{item.title}</Text>
+                    <View style={styles.ratingContainer}>
+                        <Text style={styles.ratingText}>{item.rating}⭐</Text>
+                        <Text style={styles.reviewText}>({item.reviews})</Text>
+                    </View>
                 </View>
             </View>
+        </TouchableOpacity>
+    );
 
-            <Navbar/>
+    return (
+        <View style={styles.container}>
+            {/* Welcome Text */}
+            <View style={styles.header}>
+                <Text style={styles.welcomeText}>Welcome, {username}!</Text>
+            </View>
+
+            {/* Main Content: List of Cards */}
+            <FlatList
+                data={mockData}
+                renderItem={renderItem}
+                keyExtractor={(item) => item.id}
+                contentContainerStyle={styles.list}
+            />
+
+            {/* Navbar */}
+            <Navbar />
         </View>
     );
 };
 
 const { width } = Dimensions.get('window');
-const gridSize = width * 0.4; // Adjust size for grid items (40% of screen width)
+const cardWidth = width * 0.9; // 90% of screen width
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingTop: 50,
-        backgroundColor: '#ffffff',
+    },
+    header: {
         alignItems: 'center',
+        paddingVertical: 20,
+        backgroundColor: '#f3f4f6',
+        marginTop: 20, // Added space at the top
     },
     welcomeText: {
         fontSize: 24,
+        color: '#000', // Changed to black
         fontWeight: 'bold',
-        marginBottom: 20,
-        color: '#333',
     },
-    gridContainer: {
-        flex: 1,
-        justifyContent: 'center',
+    list: {
         alignItems: 'center',
+        paddingVertical: 20,
     },
-    gridRow: {
-        flexDirection: 'row',
+    card: {
+        width: cardWidth,
+        backgroundColor: '#fff',
+        borderRadius: 15,
         marginBottom: 20,
-    },
-    gridItem: {
-        width: gridSize,
-        height: gridSize,
-        justifyContent: 'center',
-        alignItems: 'center',
-        margin: 10,
-        borderRadius: 10,
-        overflow: 'hidden',  // Ensures the image respects the border radius
+        overflow: 'hidden',
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.2,
-        shadowRadius: 1.5,
-        elevation: 3,
+        shadowOffset: { width: 0, height: 3 },
+        shadowOpacity: 0.3,
+        shadowRadius: 5,
+        elevation: 5,
     },
-    imageBackground: {
-        borderRadius: 10,  // Apply border radius to the background image
+    cardImage: {
+        height: 180,
+        justifyContent: 'flex-end',
     },
-    gridText: {
-        fontSize: 16,
+    overlay: {
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        padding: 8,
+        alignItems: 'center',
+    },
+    statusText: {
+        fontSize: 14,
         color: '#fff',
         fontWeight: 'bold',
-        textShadowColor: '#000', // Optional: Adds text shadow for better readability
-        textShadowOffset: { width: 1, height: 1 },
-        textShadowRadius: 1,
+    },
+    cardInfo: {
+        padding: 15,
+    },
+    cardTitle: {
+        fontSize: 18,
+        color: '#000',
+        fontWeight: 'bold',
+        marginBottom: 8,
+    },
+    ratingContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    ratingText: {
+        fontSize: 16,
+        color: '#ffcc00',
+        fontWeight: 'bold',
+        marginRight: 5,
+    },
+    reviewText: {
+        fontSize: 14,
+        color: '#666',
     },
 });
 
